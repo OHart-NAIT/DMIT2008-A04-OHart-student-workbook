@@ -42,10 +42,49 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
     const amount = parseFloat(document.getElementById("amount").value);
 
     // Add Expense Mode:
+    if (document.getElementById("submiter").innerText === "Add Expense") {
+        if (title && category && date && !isNaN(amount)) {
+            const newExpense = {
+                id: theExpenses.length +1,
+                title,
+                category,
+                date,
+                amount,
+            };
+            // to get this to show up, push it to the array of data then re-render the page
+            theExpenses.push(newExpense);
+            renderExpenses(theExpenses);
+            this.reset(); // Reset the form to clear after submission
+            
+        } else {
+            alert("Please fill in all fields correctly.");
+        }
+    } else {
+        // Edit Expense Mode:
+        const expenseId = parseInt(document.getElementById("expense-id").value);
+        const expenseToEdit = theExpenses.find((expense)=> expense.id === expenseId);
 
-    // Edit Expense Mode:
+        if (expenseToEdit) {
+            expenseToEdit.title = title;
+            expenseToEdit.category = category;
+            expenseToEdit.date = date;
+            expenseToEdit.amount = amount;
+            this.reset();
+            renderExpenses(theExpenses)
+        }
+
+    }
+
+    
 })
 
-// 6. Handle Search
+// 6. Handle live Search filtration (while you type)
+document.getElementById("searchbox").addEventListener("input", (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    const filteredExpenses = theExpenses.filter(
+        (expense) => expense.title.toLowerCase().includes(searchTerm)
+    );
+    renderExpenses(filteredExpenses);
+})
 
 // 7. Handle Edit/Delete Button Clicks
