@@ -34,11 +34,8 @@ const addTopicToPage = (topicName, topicList) => {
 
     // In the "addTopicToPage" function use a template string to create a new list item and add it to the page.
 
-    // topicList.innerHTML = ""
-
     let topicListItem = `<li class="list-group-item">${topicName}</li>`
     
-
     topicList.innerHTML += topicListItem;
 }
 
