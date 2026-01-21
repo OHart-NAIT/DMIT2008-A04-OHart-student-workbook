@@ -79,7 +79,7 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
             theExpenses.push(newExpense);
             renderExpenses(theExpenses);
             renderTotal(theExpenses); // EXTRA
-            this.reset(); // Reset the form to clear after submission - auses error for me
+            // this.reset(); // Reset the form to clear after submission - auses error for me
             document.getElementById("expense-form-add").reset(); // Reset the form to clear after submission - 
             
             
@@ -88,8 +88,13 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
         }
     } else {
         // Edit Expense Mode:
-        const expenseId = parseInt(document.getElementById("expense-id"));
+        // console.log("enter edit logic branch")
+
+        const expenseId = parseInt(document.getElementById("expense-id").value);
         const expenseToEdit = theExpenses.find((expense)=> expense.id === expenseId);
+
+        // console.log(expenseId)
+        // console.log(expenseToEdit)
 
         if (expenseToEdit) {
             expenseToEdit.title = title;
@@ -145,6 +150,7 @@ expenseContainer.addEventListener("click", (event) => {
             document.getElementById("amount").value = expenseToEdit.amount;
 
             document.getElementById("submiter").innerText = "Save Changes";
+            // console.log(expenseToEdit)
         }        
     }
 })
