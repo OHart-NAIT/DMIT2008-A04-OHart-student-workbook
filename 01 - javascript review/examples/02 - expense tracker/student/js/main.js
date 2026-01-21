@@ -78,7 +78,10 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
             // to get this to show up, push it to the array of data then re-render the page
             theExpenses.push(newExpense);
             renderExpenses(theExpenses);
-            renderTotal(theExpenses); // EXTRA
+
+            // EXTRA
+            renderTotal(theExpenses); 
+
             // this.reset(); // Reset the form to clear after submission - auses error for me
             document.getElementById("expense-form-add").reset(); // Reset the form to clear after submission - 
             
@@ -103,7 +106,9 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
             expenseToEdit.amount = amount;
             this.reset();
             renderExpenses(theExpenses);
-            renderTotal(theExpenses); // EXTRA
+
+            // EXTRA
+            renderTotal(theExpenses); 
 
         }
 
@@ -133,7 +138,9 @@ expenseContainer.addEventListener("click", (event) => {
         if (expenseId != -1) {
             theExpenses.splice(expenseIndex,1);
             renderExpenses(theExpenses);
-            renderTotal(theExpenses); // EXTRA
+
+            // EXTRA
+            renderTotal(theExpenses);
 
         }
         
