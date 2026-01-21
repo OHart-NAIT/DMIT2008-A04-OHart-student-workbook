@@ -61,7 +61,7 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
         }
     } else {
         // Edit Expense Mode:
-        const expenseId = parseInt(document.getElementById("expense-id").value);
+        const expenseId = parseInt(document.getElementById("expense-id"));
         const expenseToEdit = theExpenses.find((expense)=> expense.id === expenseId);
 
         if (expenseToEdit) {
@@ -70,7 +70,7 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
             expenseToEdit.date = date;
             expenseToEdit.amount = amount;
             this.reset();
-            renderExpenses(theExpenses)
+            renderExpenses(theExpenses);
         }
 
     }
@@ -87,4 +87,23 @@ document.getElementById("searchbox").addEventListener("input", (event) => {
     renderExpenses(filteredExpenses);
 })
 
-// 7. Handle Edit/Delete Button Clicks
+// 7. Handle Edit/Delete Button Clicks  
+// Alternatively you could add an event listener to every single card item but it becomes unfeasable when you have aton of items
+expenseContainer.addEventListener("click", (event) => {
+
+    if (event.target.classList.contains("delete-btn")) {
+        // console.log("delete")
+        const expenseId = parseInt(event.target.id);
+        const expenseIndex = theExpenses.findIndex((expense)=> expense.id === expenseId)
+
+        if (expenseId != -1) {
+            theExpenses.splice(expenseIndex, 1);
+            renderExpenses(theExpenses);
+        }
+        
+
+    } else if (event.target.classList.contains("edit-btn")) {
+        // console.log("edit")
+        
+    }
+})
