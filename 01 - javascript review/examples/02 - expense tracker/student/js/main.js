@@ -28,8 +28,32 @@ const renderExpenses = (expenses) => {
             </div>`
     });
 }
+
+// EXTRA FOR FUN - update the total expense amount
+const renderTotal = (expenses) => {
+
+    let expenseText = document.getElementById("total-expenses");
+
+    let newAmount = 0;
+    let totalExpense = 0;
+
+
+    expenses.forEach(
+        (expense) => {
+        
+        newAmount = expense.amount;
+
+        totalExpense += newAmount;
+
+        // console.log(totalExpense);
+        expenseText.innerHTML = totalExpense;
+    });
+}
+
 // 4. Initial Render
 renderExpenses(theExpenses)
+renderTotal(theExpenses); // EXTRA
+
 
 // 5. Handle Form Submit for Add/Edit
 document.getElementById("expense-form-add").addEventListener("submit", (event) => {
@@ -54,7 +78,10 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
             // to get this to show up, push it to the array of data then re-render the page
             theExpenses.push(newExpense);
             renderExpenses(theExpenses);
-            this.reset(); // Reset the form to clear after submission
+            renderTotal(theExpenses); // EXTRA
+            this.reset(); // Reset the form to clear after submission - auses error for me
+            document.getElementById("expense-form-add").reset(); // Reset the form to clear after submission - 
+            
             
         } else {
             alert("Please fill in all fields correctly.");
@@ -71,6 +98,8 @@ document.getElementById("expense-form-add").addEventListener("submit", (event) =
             expenseToEdit.amount = amount;
             this.reset();
             renderExpenses(theExpenses);
+            renderTotal(theExpenses); // EXTRA
+
         }
 
     }
@@ -97,13 +126,26 @@ expenseContainer.addEventListener("click", (event) => {
         const expenseIndex = theExpenses.findIndex((expense)=> expense.id === expenseId)
 
         if (expenseId != -1) {
-            theExpenses.splice(expenseIndex, 1);
+            theExpenses.splice(expenseIndex,1);
             renderExpenses(theExpenses);
+            renderTotal(theExpenses); // EXTRA
+
         }
         
 
     } else if (event.target.classList.contains("edit-btn")) {
         // console.log("edit")
-        
+        const expenseId = parseInt(event.target.id);
+        const expenseToEdit = theExpenses.findIndex((expense)=> expense.id === expenseId)
+
+        if (expenseToEdit) {
+            document.getElementById("title").value = expenseToEdit.title;
+            document.getElementById("category").value = expenseToEdit.category;
+            document.getElementById("date").value = expenseToEdit.date;
+            document.getElementById("amount").value = expenseToEdit.amount;
+
+            document.getElementById("submiter").innerText = "Save Changes";
+        }        
     }
 })
+
