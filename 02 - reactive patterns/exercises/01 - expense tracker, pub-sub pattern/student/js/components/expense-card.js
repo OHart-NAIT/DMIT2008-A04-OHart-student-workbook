@@ -1,7 +1,14 @@
+/// This is the component for *one* of the expense cards
+// We're making a custom HTML element that we can use natively e.g index.html
+// notice how this component has no bahvioral logic - thats seperated out
+// it just has structure/defintition, it is basically a template to be filled with content
+
 class ExpenseCard extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
+  constructor() { // things we want to happen when creating an instance of this element
+    super(); // first, call the constructor from the parent class
+    this.attachShadow({ mode: "open" }); // then, create a shadow DOM root (to encapsulate)
+    // "open" means the lement can be accesible/ mutable from outside code behaviour in
+    // "closed" would mean outside javascript behavior cannot affect this component at all
 
     const style = document.createElement("style");
     style.textContent = `
@@ -50,7 +57,7 @@ class ExpenseCard extends HTMLElement {
   color: white;
 }`;
 
-
+    // Notice how there are no values inline here, just identifiable classes/IDs
     this.shadowRoot.innerHTML = `
       <div class="card" id="">
         <div class="header">
@@ -70,8 +77,12 @@ class ExpenseCard extends HTMLElement {
         this.shadowRoot.appendChild(style);
   }
 
+  // the constructor will fire first to create the object
+  // then, connected callback fires anytime an insynace of this component is attached 
+  // -> even reordering list, or removing and readding the instance triggers this method
   connectedCallback() {
     this.shadowRoot.querySelector(".title").textContent =
+    // Kind of like a ternary (x || y ->)
       this.getAttribute("title") || "No title";
     this.shadowRoot.querySelector(".category").textContent =
       "Category: " + (this.getAttribute("category") || "");
@@ -83,4 +94,5 @@ class ExpenseCard extends HTMLElement {
   }
 }
 
+// finaly 'ecport' the custom element so it can be accessed natively
 customElements.define("expense-card", ExpenseCard);
