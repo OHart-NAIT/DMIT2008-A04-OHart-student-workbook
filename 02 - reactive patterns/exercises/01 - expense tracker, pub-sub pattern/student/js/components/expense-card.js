@@ -84,7 +84,7 @@ class ExpenseCard extends HTMLElement {
   // -> even reordering list, or removing and readding the instance triggers this method
   connectedCallback() {
     this.shadowRoot.querySelector(".title").textContent =
-    // Kind of like a ternary (x || y ->)
+    // Kind of like a ternary (x || y -> "x if x resolves truthy, else y")
       this.getAttribute("title") || "No title";
     this.shadowRoot.querySelector(".category").textContent =
       "Category: " + (this.getAttribute("category") || "");
