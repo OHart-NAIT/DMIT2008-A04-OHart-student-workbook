@@ -31,7 +31,7 @@ class ExpenseContainer extends HTMLElement {
   static get observedAttributes() {
     // you've seen connectedCallback(); this tatic methoud defines which data to watch
     // returns an array of named attributes to watch for changes in
-    // attributeChangedCallback(); will fire when any of these attributes change in calue
+    // attributeChangedCallback(); will fire when any of these attributes change in value
     return ['expenses'];
   }
 
