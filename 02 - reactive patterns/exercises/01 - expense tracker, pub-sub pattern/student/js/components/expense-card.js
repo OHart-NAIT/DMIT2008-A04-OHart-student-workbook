@@ -7,9 +7,11 @@ class ExpenseCard extends HTMLElement {
   constructor() { // things we want to happen when creating an instance of this element
     super(); // first, call the constructor from the parent class
     this.attachShadow({ mode: "open" }); // then, create a shadow DOM root (to encapsulate)
-    // "open" means the lement can be accesible/ mutable from outside code behaviour in
+    // "open" means the lement can be accesible/ mutable from outside code behaviour in the DOM
     // "closed" would mean outside javascript behavior cannot affect this component at all
 
+    // if we want, we can apply custom styling to our component,
+    // guaranteed to behave as we expect because we're now in a shadow root (global DOM styling cannot pierce through.)
     const style = document.createElement("style");
     style.textContent = `
     .card {
@@ -78,7 +80,7 @@ class ExpenseCard extends HTMLElement {
   }
 
   // the constructor will fire first to create the object
-  // then, connected callback fires anytime an insynace of this component is attached 
+  // then, connectedCallback() fires anytime an insynace of this component is attached 
   // -> even reordering list, or removing and readding the instance triggers this method
   connectedCallback() {
     this.shadowRoot.querySelector(".title").textContent =
@@ -94,5 +96,5 @@ class ExpenseCard extends HTMLElement {
   }
 }
 
-// finaly 'ecport' the custom element so it can be accessed natively
+// finaly 'export' the custom element so it can be accessed natively
 customElements.define("expense-card", ExpenseCard);
