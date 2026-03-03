@@ -1,5 +1,10 @@
 import Head from "next/head";
 
+// MUI components
+import Container from '@mui/material/Container';
+
+// my own components
+import TodoList from './components/TodoList';
 
 export default function Home() {
   return (
@@ -12,7 +17,9 @@ export default function Home() {
       </Head>
 
       <main>
-
+        <Container>
+          <TodoList />
+        </Container>
       </main>
     </>
   );
