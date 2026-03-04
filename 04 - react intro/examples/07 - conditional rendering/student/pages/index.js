@@ -26,10 +26,37 @@ export default function Home() {
   const [search, setSearch] = useState("")
   const [year, setYear] = useState("")
 
+  const [movies, setMovies] = useState(MOVIE_LIST)
+
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log(`year: ${year}`)
     console.log(`search: ${search}`)
+
+    filterMovies()
+  }
+
+  const filterMovies = () => {
+    // Copy the movie list so w don't mutate the original data
+    const filteredMovies =[...MOVIE_LIST]
+
+    // Trim the Search inputs and check if theres a title value
+    if (search.trim()) {
+      // Filter the array for titles that include the serach as a substring
+      filteredMovies = filteredMovies.filter((movie) => {
+        return movie.name.toLowerCase().includes(search.trim().toLowerCase())
+      })
+    }
+
+    // Trim the Search inputs and check if theres a year value
+    if (year.trim()){
+      // loop through the movies and check if the year is the same as the 
+      filteredMovies = filteredMovies.filter((movie)=> {
+       return movie.year === parseInt(year.trim())
+      })  
+    }
+
+    setMovies(filteredMovies)
   }
 
   return (
@@ -45,7 +72,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <Container>
+        <Container sx={{color: 'text.secondary'}}>
           <Typography variant="h2" component="h2" style={{textAlign: "center"}}>
             Movies
           </Typography>
@@ -82,7 +109,7 @@ export default function Home() {
                   variant="contained"
                   sx={{bgcolor: 'warning.main', 
                     '&:hover': {
-                      backgroundColor: 'warning.dark', // Background color on hover
+                      bgcolor: 'warning.dark', // Background color on hover
                     }}}
                 >Filter</Button>
               </Grid>
@@ -91,8 +118,17 @@ export default function Home() {
               </Grid>
             </Grid>
           </form>
+          {movies.length === 0 &&
+              <ListItem>
+                <ListItemText>
+                <Typography variant="p" component="div">
+                  No results please search again.
+                </Typography>
+                </ListItemText>
+              </ListItem>
+            }
           <List sx={{width: `100%`}}>
-          { MOVIE_LIST.map((movieData, index)=> {
+          { movies.map((movieData, index)=> {
               return <ListItem key={index}>
                 <ListItemText>
                   <Typography variant="p" component="div">
@@ -103,6 +139,7 @@ export default function Home() {
             })
           }
           </List>
+
         </Container>
       </main>
     </div>
