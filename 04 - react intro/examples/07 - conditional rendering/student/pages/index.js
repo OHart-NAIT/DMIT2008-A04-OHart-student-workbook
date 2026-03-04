@@ -1,9 +1,15 @@
+// State import
+import { useState } from 'react'
+
+// Data import
 import { MOVIE_LIST } from '../utils/movies'
 
+// Next.js import
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+// MUI components
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -16,6 +22,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
 export default function Home() {
+
+  const [search, setSearch] = useState("")
+  const [year, setYear] = useState("")
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    console.log(`year: ${year}`)
+    console.log(`search: ${search}`)
+  }
+
   return (
     <div>
       <Head>
@@ -33,14 +49,20 @@ export default function Home() {
           <Typography variant="h2" component="h2" style={{textAlign: "center"}}>
             Movies
           </Typography>
-          <form style={{width: '100%'}}>
+          <form style={{width: '100%'}} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
+
+              {/* This is the old MUI Grid format, because we are pinning package versions in this starter,
+              in the new format you eould simply use size={6} instead*/}
+
               <Grid item xs={6}>
                 <TextField
                   id="search-field"
                   label="search..."
                   variant="standard"
                   sx={{width: '100%'}}
+                  onChange={(e)=> {setSearch(e.target.value)}}
+                  value={search}
                   
                 />
               </Grid>
@@ -50,13 +72,18 @@ export default function Home() {
                   label="year"
                   variant="standard"
                   sx={{width: '100%'}}
-                 
+                  onChange={(e)=> {setYear(e.target.value)}}
+                  value={year}
                 />
               </Grid>
               <Grid item xs={2}>
                 <Button
                   type="submit"
                   variant="contained"
+                  sx={{bgcolor: 'warning.main', 
+                    '&:hover': {
+                      backgroundColor: 'warning.dark', // Background color on hover
+                    }}}
                 >Filter</Button>
               </Grid>
               <Grid item xs={10}>
