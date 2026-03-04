@@ -118,15 +118,19 @@ export default function Home() {
               </Grid>
             </Grid>
           </form>
-          {movies.length === 0 &&
-              <ListItem>
-                <ListItemText>
-                <Typography variant="p" component="div">
-                  No results please search again.
-                </Typography>
-                </ListItemText>
-              </ListItem>
-            }
+
+          {/* Check if theres any movies, if not display no results message, 
+          If there are movies, display how many are found included in that search
+          */}
+          <ListItem>
+            <ListItemText>
+            <Typography variant="p" component="div">
+              {movies.length === 0 ? "No results found" : `${movies.length} movie results`}
+            </Typography>
+            </ListItemText>
+          </ListItem>
+
+          {/* Display movie list below */}
           <List sx={{width: `100%`}}>
           { movies.map((movieData, index)=> {
               return <ListItem key={index}>
