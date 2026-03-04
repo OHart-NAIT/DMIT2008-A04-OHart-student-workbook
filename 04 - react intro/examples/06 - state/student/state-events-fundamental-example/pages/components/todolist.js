@@ -33,13 +33,19 @@ export default function ToDoList() {
 
     return <Box sx={{ flexGrow: 1}}>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+
+                {/* Updating Grid to the new component API:
+                    - We don't need to specify an 'item' prop, Grids are items by default 
+                    - DOn't use 'item xs' old method, we just use 'size'*/}
+                    
+
+                <Grid size={12}>
                     <Typography variant="h2" component="h2">
                         Our ToDo List
                     </Typography>
                 </Grid>
 
-                <Grid item xs ={10}>
+                <Grid size ={10}>
                     <TextField
                         id="standard-basic"
                         label="New Todo?"
@@ -50,14 +56,18 @@ export default function ToDoList() {
                     />
                 </Grid>
                 
-                <Grid item xs ={2}>
+                <Grid size ={2}>
                     <Button 
                         variant="contained" 
                         onClick={onAddTodoClick}
                     >Add Todo</Button>
                 </Grid>
                 
-                Our todo text is: {todoText}
+                <Grid size={12}>
+                    <Typography>
+                        Current input text: {todoText}
+                    </Typography>
+                </Grid>
 
             </Grid>
         </Box>
