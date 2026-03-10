@@ -1,3 +1,6 @@
+// State import
+import { useState } from 'react'
+
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -13,6 +16,25 @@ import Typography from '@mui/material/Typography';
 
 export default function Home() {
 
+  const RANDOM_QUOTE_URL = 'https://dummyjson.com/quotes'
+
+  const [quoteData, setQuoteData] = useState({
+    quote: "Quote here.",
+    author: "Author here"
+  })
+
+  const handleClick = async () => {
+    
+    fetch(`${RANDOM_QUOTE_URL}/random`)
+      .then((response)=> {
+        return response.json()
+      }).then((data)=> {
+        setQuoteData({
+          quote: data.quote,
+          author: data.author
+        })
+      })
+  }
 
   return (
     <div>
@@ -42,7 +64,7 @@ export default function Home() {
             }}
           >
             <Typography variant="h5" align="center" color="text.primary" paragraph>
-              Quote here.
+              {quoteData.quote}
             </Typography>
             <Typography
               component="h1"
@@ -51,7 +73,7 @@ export default function Home() {
               color="text.secondary"
               gutterBottom
             >
-              Author here
+              {quoteData.author}
             </Typography>
             <Box
              display="flex"
@@ -60,6 +82,7 @@ export default function Home() {
             >
               <Button
                 variant="contained"
+                onClick={handleClick}
               >
                 Get New Quote
               </Button>
