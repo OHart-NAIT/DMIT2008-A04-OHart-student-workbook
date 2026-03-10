@@ -122,15 +122,19 @@ export default function Home() {
             </Grid>
           </form>
           <List sx={{width: `100%`}}>
-          {
-            <ListItem>
-              <ListItemText>
-               <Typography variant="p" component="div">
-                { movies.length === 0 ? "No matches found." : `Found ${movies.length} results:` }
-               </Typography>
-              </ListItemText>
-            </ListItem>
-          }
+
+          <ListItem>
+            <ListItemText>
+             <Typography variant="p" component="div">
+              { movies.length === 0 ?
+                "No matches found."
+                :
+                `Results found: ${movies.length}`
+              }
+             </Typography>
+            </ListItemText>
+          </ListItem>
+
           { movies.map((movieData, index)=> {
               return <ListItem key={index}>
                 <ListItemText>
