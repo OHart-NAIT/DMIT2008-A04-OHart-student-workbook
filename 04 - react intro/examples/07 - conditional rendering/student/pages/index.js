@@ -28,12 +28,38 @@ export default function Home() {
 
   const [movies, setMovies] = useState(MOVIE_LIST)
 
+   // other variables defined with useState
+  const [errorMessage, setErrorMessage] = useState("")
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(`year: ${year}`)
-    console.log(`search: ${search}`)
+    // console.log(`year: ${year}`)
+    // console.log(`search: ${search}`)
 
+    validateSearch()
     filterMovies()
+  }
+
+  const isValidYear = (value) => {
+    return !isNaN(value) && value.trim().length === 4
+  }
+
+  const validateSearch = () => {
+    console.log("validateSearch")
+    console.log(isValidYear(year))
+    // if the year is empty
+    if (year.trim().length === 0) {
+      setErrorMessage("")
+      return
+    }
+    // check if the year isn't valid.
+    if (!isValidYear(year) || year.trim().length !== 4) {
+      setErrorMessage(`"${year}" is not a valid year`)
+      return
+    }
+    
+    // this will only execute if the year is a number
+    setErrorMessage("")
   }
 
   const filterMovies = () => {
@@ -114,7 +140,9 @@ export default function Home() {
                 >Filter</Button>
               </Grid>
               <Grid item xs={10}>
-                {/* Add the error message here*/}
+                { errorMessage !== "" &&
+                  <Alert severity="error">{errorMessage}</Alert>
+                }
               </Grid>
             </Grid>
           </form>
