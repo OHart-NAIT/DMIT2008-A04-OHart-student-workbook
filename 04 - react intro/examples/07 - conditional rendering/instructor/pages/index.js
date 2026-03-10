@@ -28,11 +28,33 @@ export default function Home() {
 
   const [movies, setMovies] = useState(MOVIE_LIST)
 
+  // we'll set up a basic example of implementing an error message
+  const [errorMsg, setErrorMsg] = useState("")
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    validateSearch();
     filterMovies();
     console.log(search);
     console.log(year);
+  }
+
+  const validateSearch = () => {
+    // I want to mostly check that the year is a 4-digit number (we're working with movies).
+
+    if (year.trim().length === 0) {
+      // this means no year was input, so there cannot be any issues with that input
+      setErrorMsg("")
+      return
+    }
+
+    if (!isValidYear(year)) {
+      setErrorMsg(`${year} is not a valid year.`)
+    }
+  }
+
+  const isValidYear = (year) => {
+    return !isNaN(year) && year.trim().length === 4
   }
 
   const filterMovies = () => {
@@ -117,7 +139,9 @@ export default function Home() {
                 >Filter</Button>
               </Grid>
               <Grid item xs={10}>
-                {/* Add the error message here*/}
+                { errorMsg &&
+                  <Alert severity="error">{errorMsg}</Alert>
+                }
               </Grid>
             </Grid>
           </form>
