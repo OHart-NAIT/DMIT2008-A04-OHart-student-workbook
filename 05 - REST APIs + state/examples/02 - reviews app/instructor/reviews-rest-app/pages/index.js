@@ -32,10 +32,20 @@ import ReviewCard from './components/ReviewCard';
 
 export default function Home() {
 
+  const API_BASE_URL = 'http://localhost:5000'
+
   const [reviews, setReviews] = useState([])
 
   const loadAllReviews = () => {
-    console.log('load reviews clicked!')
+    // I'm demonstrating 'bad practice' in the interest of concision;
+    // ideally, API functions would be in a separate layer from rendering.
+    fetch(`${API_BASE_URL}/reviews`)
+      .then((response) => {
+        return response.json()
+      }).then((data) => {
+        // console.log(data)
+        setReviews(data)
+      })
   }
 
   return (
