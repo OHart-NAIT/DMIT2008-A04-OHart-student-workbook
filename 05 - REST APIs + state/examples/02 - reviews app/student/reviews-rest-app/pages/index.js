@@ -1,6 +1,8 @@
+// Next js imports
 import Head from 'next/head'
 import Image from 'next/image'
 
+// MUI components
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -27,14 +29,57 @@ import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-
+// Our components
+import AdaptationReviewCard from './components/AdaptationReviewCard';
+import {useState} from 'react';
 
 export default function Home() {
-  const MOCK_ADAPTATION_RATING = [{
-    'title': 'Fight Club',
-    'comment': 'Great movie and book',
-    'rating': 10
-  }]
+
+  const [reviews, setReviews] = useState([])
+
+  const [title, setTitle] = useState("")
+  const [comments, setComments] = useState("")
+  const [rating, setRating] = useState(0)
+
+  const loadAllReviews = () => {
+    // console.log('button fired!')
+    fetch(`http://localhost:5000/reviews`)
+      .then((response)=> {
+        return response.json()
+      }).then((data)=> {
+        // console.log(data)
+        setReviews(data)
+      })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    // console.log("submitted form!")
+    console.log(title)
+    console.log(comments)
+    console.log(rating)
+
+    fetch(`http://localhost:5000/reviews`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'       
+      },
+      body: JSON.stringify({
+        // I only need to use key value syntax if my variable name differes from the API datafile titles
+        title,
+        comment: comments, // API datafield: my variable name
+        rating
+      })
+    }).then((response)=> {
+      return response.json()
+    }).then((data)=> {
+      // The API response body is giving me an object of what I just posted 
+      // Prevents double hitting the API right after we post
+      console.log(data)
+      setReviews([newReview, ...reviews])
+    })
+  }
+
   return (
     <div>
       <Head>
@@ -51,7 +96,9 @@ export default function Home() {
       </AppBar>
       <main>
         <Container maxWidth="md">
-          <form>
+          <form
+            onSubmit={handleSubmit}
+          >
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12}>
                 <TextField
@@ -60,6 +107,8 @@ export default function Home() {
                   label="Adaptation Title"
                   fullWidth
                   variant="standard"
+                  value={title}
+                  onChange={(event)=> {setTitle(event.target.value)}}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -69,6 +118,8 @@ export default function Home() {
                   label="Comments"
                   fullWidth
                   variant="standard"
+                  value={comments}
+                  onChange={(event)=> {setComments(event.target.value)}}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -78,6 +129,8 @@ export default function Home() {
                     row
                     aria-labelledby="adaptation-rating"
                     name="rating-buttons-group"
+                    value={rating}
+                    onChange={(event)=> {setRating(event.target.value)}}
                   >
                     <FormControlLabel value="1" control={<Radio />} label="1" />
                     <FormControlLabel value="2" control={<Radio />} label="2" />
@@ -110,32 +163,19 @@ export default function Home() {
           >
             <Button
               variant="contained"
+              onClick={loadAllReviews}
             >
               Load All Current Reviews
             </Button>
           </Box>
-          {MOCK_ADAPTATION_RATING.map((adaptation, index)=> {
-            return <Card key={index}>
-              <CardHeader
-                avatar={
-                  <Avatar sx={{ bgcolor: 'blue' }} aria-label="recipe">
-                    {adaptation.rating}
-                  </Avatar>
-                }
-                
-                title={
-                  <Typography variant="body2" color="text.secondary">
-                    {adaptation.title}
-                  </Typography>
-                }
-                
+
+          {reviews.map((adaptation, index)=> {
+            return <AdaptationReviewCard
+                key={index}
+                rating={adaptation.rating}
+                title={adaptation.title}
+                comment={adaptation.comment}
               />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {adaptation.comment}
-                </Typography>
-              </CardContent>
-            </Card>
           })}
 
         </Container>
