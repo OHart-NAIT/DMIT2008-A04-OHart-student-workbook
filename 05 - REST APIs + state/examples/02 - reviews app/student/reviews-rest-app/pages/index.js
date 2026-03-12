@@ -2,6 +2,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
 
+// Our own API functions
+import { BASE_URL } from './api/reviews';
+export { getReviews } from './api/reviews'
+
 // MUI components
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -43,13 +47,10 @@ export default function Home() {
 
   const loadAllReviews = () => {
     // console.log('button fired!')
-    fetch(`http://localhost:5000/reviews`)
-      .then((response)=> {
-        return response.json()
-      }).then((data)=> {
-        // console.log(data)
-        setReviews(data)
-      })
+    getReviews().then((data)=> {
+      setReviews(data)
+    })
+    
   }
 
   const handleSubmit = (event) => {
@@ -59,7 +60,7 @@ export default function Home() {
     console.log(comments)
     console.log(rating)
 
-    fetch(`http://localhost:5000/reviews`, {
+    fetch(`${BASE_URL}/reviews`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'       
