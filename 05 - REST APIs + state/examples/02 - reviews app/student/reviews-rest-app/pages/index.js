@@ -1,85 +1,25 @@
-// Next js imports
+// React hooks
+import { useState } from 'react';
+
+// nextjs components
 import Head from 'next/head'
-import Image from 'next/image'
 
-// Our own API functions
-import { BASE_URL } from './api/reviews';
-export { getReviews } from './api/reviews'
-
-// MUI components
-import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-
+// MUI components - layout
 import Container from '@mui/material/Container';
 
-import InputLabel from '@mui/material/InputLabel';
-import Grid from '@mui/material/Grid';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import FormControlLabel from '@mui/material/FormControlLabel';
-
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-
-
-import TextField from '@mui/material/TextField';
+// MUI components - physical (header)
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-// Our components
-import AdaptationReviewCard from './components/AdaptationReviewCard';
-import {useState} from 'react';
+// our own components
+import ReviewCard from './components/ReviewCard';
+import ReviewForm from './components/ReviewForm'
+
 
 export default function Home() {
 
   const [reviews, setReviews] = useState([])
-
-  const [title, setTitle] = useState("")
-  const [comments, setComments] = useState("")
-  const [rating, setRating] = useState(0)
-
-  const loadAllReviews = () => {
-    // console.log('button fired!')
-    getReviews().then((data)=> {
-      setReviews(data)
-    })
-    
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    // console.log("submitted form!")
-    console.log(title)
-    console.log(comments)
-    console.log(rating)
-
-    fetch(`${BASE_URL}/reviews`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'       
-      },
-      body: JSON.stringify({
-        // I only need to use key value syntax if my variable name differes from the API datafile titles
-        title,
-        comment: comments, // API datafield: my variable name
-        rating
-      })
-    }).then((response)=> {
-      return response.json()
-    }).then((data)=> {
-      // The API response body is giving me an object of what I just posted 
-      // Prevents double hitting the API right after we post
-      console.log(data)
-      setReviews([newReview, ...reviews])
-    })
-  }
 
   return (
     <div>
@@ -95,88 +35,28 @@ export default function Home() {
           </Typography>
         </Toolbar>
       </AppBar>
+
       <main>
         <Container maxWidth="md">
-          <form
-            onSubmit={handleSubmit}
-          >
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  id="title"
-                  name="title"
-                  label="Adaptation Title"
-                  fullWidth
-                  variant="standard"
-                  value={title}
-                  onChange={(event)=> {setTitle(event.target.value)}}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  id="review-comments"
-                  name="review-comments"
-                  label="Comments"
-                  fullWidth
-                  variant="standard"
-                  value={comments}
-                  onChange={(event)=> {setComments(event.target.value)}}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <FormControl>
-                  <FormLabel id="adaptation-rating">Rating</FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="adaptation-rating"
-                    name="rating-buttons-group"
-                    value={rating}
-                    onChange={(event)=> {setRating(event.target.value)}}
-                  >
-                    <FormControlLabel value="1" control={<Radio />} label="1" />
-                    <FormControlLabel value="2" control={<Radio />} label="2" />
-                    <FormControlLabel value="3" control={<Radio />} label="3" />
-                    <FormControlLabel value="4" control={<Radio />} label="4" />
-                    <FormControlLabel value="5" control={<Radio />} label="5" />
-                    <FormControlLabel value="6" control={<Radio />} label="6" />
-                    <FormControlLabel value="7" control={<Radio />} label="7" />
-                    <FormControlLabel value="8" control={<Radio />} label="8" />
-                    <FormControlLabel value="9" control={<Radio />} label="9" />
-                    <FormControlLabel value="10" control={<Radio />} label="10" />
-                  </RadioGroup>
-               </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <Button
-                  variant="contained"
-                  type="submit"
-                >
-                  Add New Review
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-          <Box
-            sx={{
-              pt: 2,
-              pb: 2,
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={loadAllReviews}
-            >
-              Load All Current Reviews
-            </Button>
-          </Box>
 
-          {reviews.map((adaptation, index)=> {
-            return <AdaptationReviewCard
-                key={index}
-                rating={adaptation.rating}
-                title={adaptation.title}
-                comment={adaptation.comment}
-              />
+          {/* Because I need to overwrite reviews in my form (upon submission),
+              I need to pass the reviews (so I can read it) & its setter (so I can overwrite it)
+              down into the form component.
+
+              We're *sharing state* between this top-level page component & the form. 
+          */}
+          <ReviewForm
+            reviews={reviews}
+            onReviewsChange={setReviews}
+          />
+
+          {reviews.map((adaptation, index) => {
+            return <ReviewCard
+              key={index}
+              rating={adaptation.rating}
+              title={adaptation.title}
+              comment={adaptation.comment}
+            />
           })}
 
         </Container>
