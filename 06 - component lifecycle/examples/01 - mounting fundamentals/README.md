@@ -10,15 +10,14 @@ The functionality we're going to have when we complete this is that we're going 
 
 # Steps
 
-1. add a new `utils/api` folder at the root of your project.
-2. within that folder create a `base.js` file and add the following lines
-```js
-export const BASE_URL = 'https://api.quotable.io'
-```
-3. again within the `utils/api` folder create a `quotes.js` file that will contain our request function and export it like below.
-```js
-import {BASE_URL } from './base.js'
+1. In `pages/api`, make a new `quotes.js` where we'll set up our API functions.
 
+```js
+//pages/api/quotes.js
+const BASE_URL = 'https://dummyjson.com/quotes/'
+```
+3. Then, add our `fetch` function to grab a random quote from the API.
+```js
 const getRandomQuote = () => {
   return fetch(`${BASE_URL}/random`)
     .then((response)=> {
@@ -33,7 +32,7 @@ export { getRandomQuote }
 4. Import the function `getRandomQuote` to the `pages/index.js` page and use it in the `handleClick` function. The component should now look like this.
 ```js
 // ... other imports above.
-import { getRandomQuote } from '../utils/api/quotes.js'  
+import { getRandomQuote } from './api/quotes.js'  
 
 export default function Home() {
   const [quoteData, setQuoteData] = useState({
@@ -44,7 +43,7 @@ export default function Home() {
   const handleClick = () => {
     getRandomQuote().then((data)=> {
         setQuoteData({
-          quote: data.content,
+          quote: data.quote,
           author: data.author
         })
       })
