@@ -1,5 +1,7 @@
+// Next js components
 import Head from 'next/head'
 
+// MUI components
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -7,8 +9,29 @@ import Box from '@mui/material/Box';
 import AgencyCard from '@components/AgencyCard';
 import NavBar from '@components/NavBar';
 
+// React imports
+import { useEffect, useState } from 'react'
+
+// Agency API import
+import { getAgencies } from '@utils/api/agencies'
 
 export default function Home() {
+  const [agenciesData, setAgenciesData] = useState([])
+
+  useEffect(
+    // Param1: Callback / logic that shoudl fire
+    ()=> {
+    // fire this on load.
+    getAgencies().then(
+      (data)=> {
+        console.log(data)
+        setAgenciesData(data.results)
+      }
+    )
+  }, 
+  // Param2: dependency array 
+  []
+)
 
   return (
     <div>
