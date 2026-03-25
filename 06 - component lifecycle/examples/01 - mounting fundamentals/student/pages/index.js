@@ -25,7 +25,7 @@ export default function Home() {
     quote: DEFAULT_QUOTE,
     author: DEFAULT_AUTHOR
   })
-  
+
   const [numberOfQuotes, setNumberOfQuotes] = useState(0)
 
   useEffect(()=> {
@@ -48,10 +48,6 @@ export default function Home() {
         })
       })
   }
-
-
-
-
 
   return (
     <div>

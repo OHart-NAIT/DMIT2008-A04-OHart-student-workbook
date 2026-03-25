@@ -1,4 +1,6 @@
 import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -7,7 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 
-export default function ReviewCard({ rating, title, comment }) {
+export default function ReviewCard({ review, reviews, onReviewsChange }) {
 
   const getRatingColour = (rating) => {
 
@@ -32,26 +34,44 @@ export default function ReviewCard({ rating, title, comment }) {
 
     return colour.display
   }
+
+  const deleteRating = (reviewId) => {
+    // remember, Array.filter() returns a new array! This is handy for us, because
+    // state variables are immutable, so we always need to fully reconstruct what we
+    // pass to the setter.
+    let filteredReviews = reviews.filter(
+      (review) => {
+        return reviewId !== review.id
+      }
+    )
+    onReviewsChange(filteredReviews)
+  }
   
   return (
     <Card sx={{ mt: 3 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: getRatingColour(rating) }} aria-label="recipe">
-            {rating}
+          <Avatar sx={{ bgcolor: getRatingColour(review.rating) }} aria-label="recipe">
+            {review.rating}
           </Avatar>
         }
         
+        action={
+          <IconButton onClick={() => {deleteRating(review.id)}}>
+            <DeleteIcon />
+          </IconButton>
+        }
+
         title={
           <Typography variant="body2" color="text.secondary">
-            {title}
+            {review.title}
           </Typography>
         }
         
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {comment}
+          {review.comment}
         </Typography>
       </CardContent>
     </Card>
