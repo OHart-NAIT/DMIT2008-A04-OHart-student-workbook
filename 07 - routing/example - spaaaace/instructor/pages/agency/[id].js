@@ -1,5 +1,11 @@
+// react hooks
+import { useState, useEffect } from 'react';
+
 // nextjs routing
 import { useRouter } from 'next/router';
+
+// our functions
+import { getAgency } from '@utils/api/agencies';
 
 // mui components
 import Container from '@mui/material/Container';
@@ -16,6 +22,15 @@ export default function Agency() {
 
   const router = useRouter()
   const { id } = router.query // good ol' destructuring
+
+  const [agencyData, setAgencyData] = useState(null)
+
+  useEffect(() => {
+    getAgency(id).then((data) => {
+      console.log(data)
+      setAgencyData(data)
+    })
+    }, [])
 
   return (
     <>
